@@ -24,4 +24,7 @@ mongoose.connect(
 // Use this to log mongo queries being executed!
 mongoose.set("debug", true);
 
-app.listen(PORT, () => console.log(`🌍 Connected on localhost:${PORT}`));
+// <.once> opens it to give us access to database with the server
+mongoose.connection.once("open", () => {
+	app.listen(PORT, () => console.log(`🌍 Connected on localhost:${PORT}`));
+});
