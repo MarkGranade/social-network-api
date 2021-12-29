@@ -11,7 +11,7 @@ const userController = {
 			});
 	},
 
-	// Get one user
+	// Get one user by _id
 	getUserById({ params }, res) {
 		User.findOne({ _id: params.id })
 			.then((dbUserData) => {
@@ -34,7 +34,7 @@ const userController = {
 			.catch((err) => res.status(400).json(err));
 	},
 
-	// update user by id
+	// update user by _id
 	updateUser({ params, body }, res) {
 		User.findOneAndUpdate({ _id: params.id }, body, { new: true })
 			.then((dbUserData) => {
@@ -75,7 +75,7 @@ const userController = {
 			.catch((err) => res.status(400).json(err));
 	},
 
-	//TODO: DELETE to remove a friend from a user's friend list
+	// /api/users/:userId/friends/:friendId
 	deleteFriend({ params }, res) {
 		User.findOneAndUpdate(
 			{ _id: params.userId },
