@@ -5,6 +5,7 @@ const thoughtController = {
 	// Get all thoughts
 	getAllThoughts(req, res) {
 		Thought.find({})
+			.select("-__v")
 			.then((dbThoughtData) => res.json(dbThoughtData))
 			.catch((err) => {
 				console.log(err);
@@ -29,7 +30,7 @@ const thoughtController = {
 	},
 
 	// create new Thought (and push the Thought's <_id> to the associated user's [thoughts] array)
-	// TODO: push the Thought's _id to the associated user
+	// expects: {"thoughtText": "Test thought text", "username": "Bobby", "userId": "61ccaee29374031abe225e37"}
 	createThought({ body }, res) {
 		Thought.create(body)
 			.then((dbThoughtData) => {
@@ -57,7 +58,7 @@ const thoughtController = {
 	},
 
 	// Update thought by _id
-	updateThought({ params }, res) {
+	updateThought({ params, body }, res) {
 		Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
 			.then((dbThoughtData) => {
 				if (!dbThoughtData) {
@@ -82,7 +83,8 @@ const thoughtController = {
 			.catch((err) => res.status(400).json(err));
 	},
 
-	// /api/thoughts/:thoughtId/reactions
+	// Create reaction === /api/thoughts/:thoughtId/reactions
+	// expects: {"reactionBody": "That is a cool thought!", "username": "Bobby"}
 	createReaction({ params, body }, res) {
 		Thought.findOneAndUpdate(
 			{
@@ -101,6 +103,7 @@ const thoughtController = {
 			.catch((err) => res.status(400).json(err));
 	},
 
+	// Delete reaction === /api/thoughts/:thoughtId/reactions/:reactionId
 	deleteReaction({ params }, res) {
 		console.log(params);
 		Thought.findOneAndUpdate(

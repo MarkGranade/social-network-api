@@ -4,6 +4,12 @@ const userController = {
 	// Get all users
 	getAllUser(req, res) {
 		User.find({})
+			.populate({
+				path: "friends",
+				// select: "-__v",
+				select: "-__v -thoughts -email",
+			})
+			.select("-__v")
 			.then((dbUserData) => res.json(dbUserData))
 			.catch((err) => {
 				console.log(err);
@@ -27,7 +33,7 @@ const userController = {
 			});
 	},
 
-	// createUser
+	// createUser: expects {"username": "Bobby", "email": "testing@gmail.com"}
 	createUser({ body }, res) {
 		User.create(body)
 			.then((dbUserData) => res.json(dbUserData))
@@ -60,7 +66,7 @@ const userController = {
 			.catch((err) => res.status(400).json(err));
 	},
 
-	// /api/users/:userId/friends/:friendId
+	// Add friend === /api/users/:userId/friends/:friendId
 	addFriend({ params }, res) {
 		User.findOneAndUpdate(
 			{ _id: params.userId },
@@ -75,7 +81,7 @@ const userController = {
 			.catch((err) => res.status(400).json(err));
 	},
 
-	// /api/users/:userId/friends/:friendId
+	// Delete friend === /api/users/:userId/friends/:friendId
 	deleteFriend({ params }, res) {
 		User.findOneAndUpdate(
 			{ _id: params.userId },

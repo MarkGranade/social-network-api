@@ -15,9 +15,7 @@ const ThoughtSchema = new Schema(
 			type: Date,
 			default: Date.now,
 			// use a getter method to format the timestamp on query
-			get: function (date) {
-				return dateFormat(date);
-			},
+			get: (createdAtVal) => dateFormat(createdAtVal),
 		},
 		// the user that created this thought
 		username: {
@@ -30,6 +28,7 @@ const ThoughtSchema = new Schema(
 	{
 		toJSON: {
 			virtuals: true,
+			getters: true,
 		},
 	}
 );
